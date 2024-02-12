@@ -19,7 +19,7 @@ struct Shovel : public Tool {
                 return ;
             }
             this->numberOfUses++;
-            std::cout << "Shovel used!" << std::endl;
+            std::cout << "Shovel being used!" << std::endl;
         }
 };
 

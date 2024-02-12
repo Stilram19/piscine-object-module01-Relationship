@@ -8,13 +8,15 @@
 # include <vector>
 
 class Worker {
-    // attributes
     private:
         Position                   coordonnee;
         Statistic                  stat;
         std::vector<Tool *>        tools;
         std::vector<Workshop *>    workshops;
 
+        //types
+        typedef std::vector<Tool *>::const_iterator tool_iterator;
+        typedef std::vector<Workshop *>::const_iterator workshop_iterator;
     public:
         Worker() {
             std::cout << "Worker constructed!" << std::endl;
@@ -30,7 +32,7 @@ class Worker {
         Tool *GetTool() const {
             ToolType cmp; // creating an instance of the tool type for comparison purposes.
 
-            for (std::vector<Tool *>::iterator tool = this->tools.begin(); tool != this->tools.end(); tool++) {
+            for (tool_iterator tool = this->tools.begin(); tool != this->tools.end(); tool++) {
                 if (cmp->getType() == (*tool)->getType()) {
                     std::cout << "Tool Found!" << std::endl;
                     return (tool);
@@ -42,7 +44,7 @@ class Worker {
         }
 
         bool has_workshop(Workshop *workshop) {
-            for (std::vector<Workshop *>::const_iterator w = this->workshops.begin(); w != this->workshops.end(); w++) {
+            for (workshop_iterator w = this->workshops.begin(); w != this->workshops.end(); w++) {
                 if (workshop == *w) {
                     return (true);
                 }
@@ -54,7 +56,7 @@ class Worker {
             if (tool == NULL) {
                 throw std::runtime_error("Tool cannot be NULL!");
             }
-            for (std::vector<Tool *>::const_iterator _tool = this->tools.begin(); _tool != this->tools.end(); _tool++) {
+            for (tool_iterator _tool = this->tools.begin(); _tool != this->tools.end(); _tool++) {
                 if (tool == *_tool) {
                     std::cout << "Tool is already in possession of the worker!" << std::endl;
                     return (tool);
@@ -68,7 +70,11 @@ class Worker {
         Tool *giveToolBack(Tool *tool) {
             Tool *ret = NULL;
 
-            for (std::vector<Tool *>::const_iterator _tool = this->tools.begin(); _tool != this->tools.end(); _tool++) {
+            if (tool == NULL) {
+                throw std::runtime_error("Tool can't be NULL!");
+            }
+
+            for (tool_iterator _tool = this->tools.begin(); _tool != this->tools.end(); _tool++) {
                 if (tool == *_tool) {
                     ret = *_tool;
                     this->tools.erase(_tool);
@@ -83,9 +89,10 @@ class Worker {
             }
 
             // check if a workshop will fire the worker for losing this tool.
-            for (std::vector<Workshop *>::const_iterator workshop = this->workshops.begin(); workshop != this->workshops.end(); workshop++) {
-                if ((*workshop)->has_necessary_tool(this)) {
-                    
+            for (workshop_iterator workshop = this->workshops.begin(); workshop != this->workshops.end(); workshop++) {
+                if (!(*workshop)->get_necessary_tool(this)) {
+                    this->leave_workshop(*workshop);
+                    workshop--;
                 }
             }
 
@@ -111,9 +118,35 @@ class Worker {
                 throw std::runtime_error("workshop can't be NULL!");
             }
 
-            if (this->has_workshop(workshop)) {
-
+            if (!this->has_workshop(workshop)) {
+                std::cout << "worker doesn't work for this workshop!" << std::endl;
+                return ;
             }
+
+            workshop->release_worker(this);
+
+            for (workshop_iterator w = this->workshops.begin(); w != this->workshops.end(); w++) {
+                if (workshop == *w) {
+                    this->workshops.erase(w);
+                    break ;
+                }
+            }
+        }
+
+        void work(Workshop *workshop) {
+            if (workshop == NULL) {
+                throw std::runtime_error("workshop can't be NULL!");
+            }
+
+            if (!this->has_workshop(workshop)) {
+                throw std::runtime_error("worker doesn't work for this workshop");
+            }
+
+            Tool *tool = workshop->get_necessary_tool(this);
+
+            std::cout << "worker is working!" << std::endl;
+
+            tool->use();
         }
 };
 

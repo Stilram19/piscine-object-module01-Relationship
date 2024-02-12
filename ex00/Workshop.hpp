@@ -9,10 +9,13 @@ class Workshop {
         std::string             necessary_tool_type;
         std::vector<Worker *>   workers;
 
+        // types
+        typedef std::vector<Worker *>::const_iterator worker_iterator;
+
     // Destructor
     public:
         ~Workshop() {
-            for (std::vector<Worker *>:: const_iterator worker = this->workers.begin(); worker != this->workers.end(); worker++) {
+            for (worker_iterator worker = this->workers.begin(); worker != this->workers.end(); worker++) {
                 delete (*worker);        
             }
 
@@ -21,17 +24,13 @@ class Workshop {
 
     // methods
     public:
-        bool has_necessary_tool(Worker *worker) {
-            Tool *ret = NULL;
-
-            if (this->necessary_tool_type == "Hammer") {
-                ret = worker->GetTool<Hammer>();
-            }
+        Tool *get_necessary_tool(Worker *worker) {
+            Tool *ret = worker->GetTool<Hammer>();
 
             if (this->necessary_tool_type == "Shovel") {
                 ret = worker->GetTool<Shovel>();
             }
-            return (ret != NULL);
+            return (ret);
         }
 
         void register_worker(Worker *worker) {
@@ -39,7 +38,7 @@ class Workshop {
                 throw std::runtime_error("worker can't be null");
             }
 
-            for (std::vector<Worker *>::const_iterator w = this->workers.begin(); w != this->workers.end(); w++) {
+            for (worker_iterator w = this->workers.begin(); w != this->workers.end(); w++) {
                 if (worker == *w) {
                     std::cout << "Worker already registered" << std::endl;
                     return ;
@@ -48,7 +47,7 @@ class Workshop {
 
             // check if worker has necessary tool
 
-            if (this->has_necessary_tool(worker) == false) {
+            if (this->get_necessary_tool(worker) == NULL) {
                 std::cout << "Worker hasn't necessary tool!" << std::endl;
                 return ;
             }
@@ -61,12 +60,23 @@ class Workshop {
             if (worker == NULL) {
                 throw std::runtime_error("worker can't be NULL!");
             }
-            for (std::vector<Worker *>::const_iterator w = this->workers.begin(); w != this->workers.end(); w++) {
+            for (worker_iterator w = this->workers.begin(); w != this->workers.end(); w++) {
                 if (worker == *w) {
                     this->workers.erase(w);
+                    worker->leave_workshop(this);
                     std::cout << "Worker released!" << std::endl;
                     return ;
                 }
+            }
+        }
+
+        void executeWorkDay() {
+            if (this->workers.size() != 0) {
+                std::cout << "Launching the work day!" << std::endl;
+            }
+
+            for (worker_iterator worker = this->workers.begin(); worker != this->workers.end(); worker++) {
+                (*worker)->work(this);
             }
         }
 };

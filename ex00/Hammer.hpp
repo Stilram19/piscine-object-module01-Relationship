@@ -19,7 +19,7 @@ struct Hammer : public Tool {
                 return ;
             }
             this->numberOfUses++;
-            std::cout << "Hammer used!" << std::endl;
+            std::cout << "Hammer being used!" << std::endl;
         }
 };
 
