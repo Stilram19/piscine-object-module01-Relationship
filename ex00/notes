@@ -1,0 +1,3 @@
+(*) when having two classes, each wants to include the other is just fine if it's done in seprate modules.
+but it when the classes are included in the same module, it'll raise problems.
+the solution is to implement the classes in .cpp and to declare both classes (class CLASS;)
