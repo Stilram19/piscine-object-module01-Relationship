@@ -36,7 +36,10 @@ class Worker {
             return (NULL);
         }
 
+    private:
         bool has_workshop(Workshop *workshop);
+
+    public:
         Tool *takeTool(Tool *tool);
         Tool *giveToolBack(Tool *tool);
         void apply_for_work(Workshop *workshop);

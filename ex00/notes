@@ -1,3 +1,15 @@
 (*) when having two classes, each wants to include the other is just fine if it's done in seprate modules.
 but it when the classes are included in the same module, it'll raise problems.
 the solution is to implement the classes in .cpp and to declare both classes (class CLASS;)
+
+(*) Composition: a fundamental concept in OOP representing a has-a-relationship, the component object is owned by the composit object.
+, when the composite object is destroyed the component object is also destroyed.
+(the composite object's destructor is called first, because otherwise the composite object would hold an invalid reference to the component object).
+a composite object has of the component object during its whole life time. (their relationship doesn't die until the composite is destroyed, and then the component is destroyed as well). the memory allocated for the component object is a part of the whole memory allocated for the composite object (like any other attribute),
+and since the component object may have more than one attribute, these attribtutes are just included in the composite object (i like to think of it that way, and it's not just an analogy to make things look easier, but it's absolutely true at least memory wise).
+
+(*) aggregation: a fundamental concept in OOP representing a has-a-relationship,
+the concept is about 'collecting' (the aggregate or whole object has a collection of part objects), so when you collect an object, you have it, then, before you collected it, you hadn't this object, and after you may lose it or throw it, and in this case you don't have it. the memory allocated for the part object is not part of the memory of the aggregate object, it is independent of it, and has its own life cycle. what is part of the memory of the aggregate object is a pointer that may point or not (it depends on the state at a given moment) a part object which is created and constructed in another memory. the part object exists independently, and can be collected and thrown at any time. it is a weaker relationship than composition.
+having a component object std::vector<PartClass *> is the same of having aggregation relationships between the composite object and the PartClass objects.
+
+(*) Association: a fundamental concept in OOP, it can be one-to-one, one-to-many, many-to-many. Aggregation is a special case of association (it can be one-to-one or one-to-many).

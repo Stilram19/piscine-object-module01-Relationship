@@ -18,7 +18,10 @@ class Workshop {
         Workshop(const std::string &necessary_tool);
         ~Workshop();
 
-    // methods
+    // Methods
+    private:
+        bool has_worker(Worker *worker);
+
     public:
         Tool *get_necessary_tool(Worker *worker);
         void register_worker(Worker *worker);

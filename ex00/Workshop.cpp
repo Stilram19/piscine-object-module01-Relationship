@@ -15,6 +15,15 @@ Workshop::~Workshop() {
     std::cout << "Workshop destroyed!" << std::endl;
 }
 
+bool Workshop::has_worker(Worker *worker) {
+    for (worker_iterator w = this->workers.begin(); w != this->workers.end(); w++) {
+        if (worker == *w) {
+            return (true);
+        }
+    }
+    return (false);
+}
+
 Tool *Workshop::get_necessary_tool(Worker *worker) {
     Tool *ret = worker->GetTool<Hammer>();
 
@@ -29,15 +38,12 @@ void Workshop::register_worker(Worker *worker) {
         throw std::runtime_error("worker can't be null");
     }
 
-    for (worker_iterator w = this->workers.begin(); w != this->workers.end(); w++) {
-        if (worker == *w) {
-            std::cout << "Worker already registered" << std::endl;
-            return ;
-        }
+    if (this->has_worker(worker)) {
+        std::cout << "Worker already registered" << std::endl;
+        return ;
     }
 
     // check if worker has necessary tool
-
     if (this->get_necessary_tool(worker) == NULL) {
         std::cout << "Worker hasn't necessary tool!" << std::endl;
         return ;
