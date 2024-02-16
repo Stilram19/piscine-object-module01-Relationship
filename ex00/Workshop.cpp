@@ -4,7 +4,7 @@ Workshop::Workshop() : necessary_tool_type("Shovel") {
     std::cout << "Workshop constructed, necessary tool is Shovel!" << std::endl;
 }
 
-Workshop::Workshop(const std::string &necessary_tool) {
+Workshop::Workshop(const std::string &necessary_tool) : necessary_tool_type(necessary_tool) {
     if (necessary_tool != "Shovel" && necessary_tool != "Hammer") {
         throw std::runtime_error("necessary tool can be either Shovel or Hammer!");
     }
