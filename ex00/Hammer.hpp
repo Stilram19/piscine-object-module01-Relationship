@@ -4,9 +4,6 @@
 # include "Tool.hpp"
 
 struct Hammer : public Tool {
-    private:
-        int numberOfUses;
-
     public:
         Hammer() : Tool("Hammer") { std::cout << "Hammer Constructed!" << std::endl; }
 

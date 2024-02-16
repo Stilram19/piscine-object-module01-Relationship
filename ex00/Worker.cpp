@@ -12,8 +12,9 @@ Worker::~Worker() {
 
 // Methods
 
-bool Worker::has_workshop(Workshop *workshop) {
-    for (workshop_iterator w = this->workshops.begin(); w != this->workshops.end(); w++) {
+bool Worker::has_workshop(Workshop *workshop) const {
+    std::cout << "has_workshop called!" << std::endl;
+    for (const_workshop_iterator w = this->workshops.begin(); w != this->workshops.end(); w++) {
         if (workshop == *w) {
             return (true);
         }
@@ -25,12 +26,14 @@ Tool *Worker::takeTool(Tool *tool) {
     if (tool == NULL) {
         throw std::runtime_error("Tool cannot be NULL!");
     }
+
     for (tool_iterator _tool = this->tools.begin(); _tool != this->tools.end(); _tool++) {
         if (tool == *_tool) {
             std::cout << "Tool is already in possession of the worker!" << std::endl;
             return (tool);
         }
     }
+
     this->tools.push_back(tool);
     std::cout << "New Tool given to worker!" << std::endl;
     return (tool);
@@ -78,8 +81,17 @@ void Worker::apply_for_work(Workshop *workshop) {
         std::cout << "Worker is already registered in the workshop!" << std::endl;
         return ;
     }
-    std::cout << "worker applied for work!" << std::endl;
-    workshop->register_worker(this);
+
+    this->workshops.push_back(workshop);
+    std::cout << "worker applied for work! " << std::endl;
+
+    if (workshop->register_worker(this) == false) {
+        this->workshops.pop_back();
+        std::cout << "worker got rejected!" << std::endl;
+        return ;
+    }
+
+    std::cout << "worker got accepted!" << std::endl;
 }
 
 void Worker::leave_workshop(Workshop *workshop) {
@@ -92,11 +104,11 @@ void Worker::leave_workshop(Workshop *workshop) {
         return ;
     }
 
-    workshop->release_worker(this);
-
     for (workshop_iterator w = this->workshops.begin(); w != this->workshops.end(); w++) {
         if (workshop == *w) {
             this->workshops.erase(w);
+            std::cout << "worker left the workshop!" << std::endl;
+            workshop->release_worker(this);
             break ;
         }
     }
@@ -116,4 +128,25 @@ void Worker::work(Workshop *workshop) {
     std::cout << "worker is working!" << std::endl;
 
     tool->use();
+
+    this->stat.levelUp();
+
+    std::cout << stat;
+}
+
+std::ostream &operator<<(std::ostream &os, Worker &worker) {
+    os << "**********WORKER**********" << std::endl;
+    os << worker.stat;
+    os << "Number of workshops: " << worker.workshops.size() << std::endl;
+    os << "Tools: [";
+
+    for (Worker::tool_iterator tool = worker.tools.begin(); tool != worker.tools.end(); tool++) {
+        os << "{" << (**tool) << "}";
+        if (tool + 1 != worker.tools.end()) {
+            os << ", ";
+        }
+    }
+
+    os << "]" << std::endl;
+    return (os);
 }

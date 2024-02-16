@@ -3,6 +3,8 @@
 
 # include <iostream>
 
+# define MAX_LEVEL 100
+
 struct Statistic {
     // attributes
     private:
@@ -15,12 +17,23 @@ struct Statistic {
             std::cout << "Statistic constructed by default!" << std::endl;
         }
 
-        Statistic(int level, int exp) : level(level), exp(exp) {
-            std::cout << "Statistic constructed!" << std::endl;
-        }
-
         ~Statistic() {
             std::cout << "Statistic destroyed!" << std::endl;
+        }
+
+        void levelUp() {
+            std::cout << "Worker is ready to level up" << std::endl;
+            this->exp++;
+
+            if (this->exp == 100 && this->level < MAX_LEVEL) {
+                this->exp = 0;
+                this->level++;
+            }
+        }
+
+        friend std::ostream &operator<<(std::ostream &os, Statistic &stat) {
+            os << "level: " << stat.level << ", exp: " << stat.exp << std::endl;
+            return (os);
         }
 };
 

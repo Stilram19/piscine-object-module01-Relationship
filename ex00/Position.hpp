@@ -23,6 +23,12 @@ struct Position {
         ~Position() {
             std::cout << "Position destroyed!" << std::endl;
         }
+
+        void move_to(int x, int y, int z) {
+            this->x = x;
+            this->y = y;
+            this->z = z;
+        }
 };
 
 #endif

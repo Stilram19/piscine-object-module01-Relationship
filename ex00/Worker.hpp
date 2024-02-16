@@ -12,8 +12,10 @@ class Worker {
         std::vector<Workshop *>    workshops;
 
         //types
-        typedef std::vector<Tool *>::const_iterator tool_iterator;
-        typedef std::vector<Workshop *>::const_iterator workshop_iterator;
+        typedef std::vector<Tool *>::iterator tool_iterator;
+        typedef std::vector<Workshop *>::iterator workshop_iterator;
+        typedef std::vector<Tool *>::const_iterator const_tool_iterator;
+        typedef std::vector<Workshop *>::const_iterator const_workshop_iterator;
 
     public:
         Worker();
@@ -23,21 +25,22 @@ class Worker {
     public:
         template <class ToolType>
         Tool *GetTool() const {
+            std::cout << "GetTool called!" << std::endl;
             ToolType cmp; // creating an instance of the tool type for comparison purposes.
 
-            for (tool_iterator tool = this->tools.begin(); tool != this->tools.end(); tool++) {
-                if (cmp->getType() == (*tool)->getType()) {
+            for (const_tool_iterator tool = this->tools.begin(); tool != this->tools.end(); tool++) {
+                if (cmp.getType() == (*tool)->getType()) {
                     std::cout << "Tool Found!" << std::endl;
-                    return (tool);
+                    return (*tool);
                 }
             }
 
             std::cout << "Tool Not Found!" << std::endl;
             return (NULL);
         }
-
+    
     private:
-        bool has_workshop(Workshop *workshop);
+        bool has_workshop(Workshop *workshop) const;
 
     public:
         Tool *takeTool(Tool *tool);
@@ -45,6 +48,7 @@ class Worker {
         void apply_for_work(Workshop *workshop);
         void leave_workshop(Workshop *workshop);
         void work(Workshop *workshop);
+        friend std::ostream &operator<<(std::ostream &os, Worker &worker);
 };
 
 #endif

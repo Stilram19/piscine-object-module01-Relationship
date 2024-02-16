@@ -4,9 +4,6 @@
 # include "Tool.hpp"
 
 struct Shovel : public Tool {
-    private:
-        int numberOfUses;
-
     public:
         Shovel() : Tool("Shovel") { std::cout << "Shovel Constructed!" << std::endl; }
 

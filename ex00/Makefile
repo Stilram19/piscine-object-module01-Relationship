@@ -1,5 +1,5 @@
 NAME=	bank
-SRCS=	main.cpp
+SRCS=	main.cpp Workshop.cpp Worker.cpp
 
 OBJS=	${SRCS:.cpp=.o}
 CPP=	c++
