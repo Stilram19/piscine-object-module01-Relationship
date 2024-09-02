@@ -15,13 +15,13 @@ Here is the link to the [subject](https://cdn.intra.42.fr/pdf/pdf/109506/en.subj
    git clone git@github.com:Stilram19/pescine-object-module01-Relationship.git
    ```
 
-3. Navigate to the repository's directory:
+2. Navigate to the repository's directory:
 
     ```bash
     cd pescine-object-module01-Relationship/ex00/
     ```
 
-4. Compile and Run the program:
+3. Compile and Run the program:
 
    ``` bash
    make run
