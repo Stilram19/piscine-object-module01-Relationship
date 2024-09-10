@@ -1,10 +1,10 @@
-# Advanced OOP Pescine - Module 01 (relationships)
+# Advanced OOP Piscine - Module 01 (relationships)
 
 ![](resources/intro.webp)
 
 ## About
 
-This is the second module of the advanced pescine of OOP, it will introduce to how variables/attributes can be linked together, using specific kind of relationship.
+This is the second module of the advanced piscine of OOP, it will introduce to how variables/attributes can be linked together, using specific kind of relationship.
 Here is the link to the [subject](https://cdn.intra.42.fr/pdf/pdf/109506/en.subject.pdf)
 
 ## Installation && Usage
